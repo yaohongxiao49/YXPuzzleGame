@@ -12,14 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RankListCell : UITableViewCell
 
-@property (nonatomic, strong) UILabel *userNameLabel;
-@property (nonatomic, strong) UILabel *userName;
-@property (nonatomic, strong) UILabel *firstPassLabel;
-@property (nonatomic, strong) UILabel *firstPass;
-@property (nonatomic, strong) UILabel *firstPassRight;
-@property (nonatomic, strong) UILabel *secondPassLabel;
-@property (nonatomic, strong) UILabel *secondPass;
-@property (nonatomic, strong) UILabel *secondPassRight;
+@property (nonatomic, strong) UILabel *userNameLab;
+@property (nonatomic, strong) UILabel *titleLab;
 
 @end
 

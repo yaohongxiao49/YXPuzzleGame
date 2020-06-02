@@ -8,14 +8,13 @@
 
 #import "ViewController.h"
 #import "LoginVC.h"
-#import "ImgGameVC.h"
+#import "ImgGameGroupVC.h"
 #import "RankListVC.h"
 
 @interface ViewController ()
 
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) ImgGameVC *imgGameVC;
-@property (nonatomic, assign) BOOL isLog;
+@property (nonatomic, strong) UILabel *userName;
 
 @end
 
@@ -25,29 +24,26 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    _imgGameVC = [[ImgGameVC alloc] init];
-    
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"Home";
 
     _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
     [_imageView setImage:[UIImage imageNamed:@"星空.jpeg"]];
+    _imageView.userInteractionEnabled = YES;
     [self.view addSubview:_imageView];
     
     [self initView];
     
-    BOOL boolLogin = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
-    if (boolLogin) [self login];
+    BOOL boolLogin = [UserMessageManager sharedManager].boolLogin;
+    if (!boolLogin) [self login];
 }
 
 - (void)login {
     
-    _isLog =! _isLog;
-    if (_isLog) {
-        LoginVC *loginVC = [[LoginVC alloc] init];
-        loginVC.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self presentViewController:loginVC animated:YES completion:nil];
-    }
+    LoginVC *loginVC = [[LoginVC alloc] init];
+    loginVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:loginVC animated:YES completion:nil];
 }
 
 - (void)initView {
@@ -58,7 +54,11 @@
     welComeText.font = [UIFont fontWithName:@"DIN Alternate" size:20];
     [self.view addSubview:welComeText];
     
-    _imageView.userInteractionEnabled = YES;
+    _userName = [[UILabel alloc] initWithFrame:CGRectMake(100, 120, 100, 30)];
+    _userName.textColor = [UIColor whiteColor];
+    _userName.font = [UIFont fontWithName:@"DIN Alternate" size:20];
+    _userName.text = [UserMessageManager sharedManager].userName;
+    [self.view addSubview:_userName];
     
     UIButton *startGameButton = [UIButton buttonWithType:UIButtonTypeSystem];
     startGameButton.frame = CGRectMake(0, 0, 300, 50);
@@ -78,8 +78,6 @@
     [selectGameButton addTarget:self action:@selector(processSelectGameButton) forControlEvents:UIControlEventTouchUpInside];
     [_imageView addSubview:selectGameButton];
     
-    
-#pragma mark - 通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processSuccess:) name:@"success" object:nil];
 }
 
@@ -87,8 +85,11 @@
 /** 游戏开始按钮事件监听 */
 - (void)processStartGameButton {
     
-    _imgGameVC.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:_imgGameVC animated:YES completion:nil];
+    ImgGameGroupVC *vc = [[ImgGameGroupVC alloc] init];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    vc.exChangeImgArr = @[@"Pom1.png", @"Pom2.png", @"Pom3.png"];
+    vc.baseNum = 3;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 /** 排行榜按钮事件监听 */
 - (void)processSelectGameButton {
@@ -101,11 +102,7 @@
 - (void)processSuccess:(NSNotification *)notification {
     
     NSDictionary *dic = [notification userInfo];
-    UILabel *userName = [[UILabel alloc] initWithFrame:CGRectMake(100, 120, 100, 30)];
-    userName.textColor = [UIColor whiteColor];
-    userName.font = [UIFont fontWithName:@"DIN Alternate" size:20];
-    userName.text = [dic objectForKey:@"text"];
-    [self.view addSubview:userName];
+    _userName.text = [dic objectForKey:@"text"];
 }
 
 @end

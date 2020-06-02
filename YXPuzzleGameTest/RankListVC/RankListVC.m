@@ -33,16 +33,16 @@
 
 - (void)initData {
     
-    BmobQuery * bquery = [BmobQuery queryWithClassName:@"JigsawGame"];
+    __weak typeof(self) weakSelf = self;
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"JigsawGame"];
     //由高到低排列
-//    [bquery orderByAscending:@"stepsFirstCount"];
-    [bquery orderByAscending:@"stepsFirstCount"];
+    [bquery orderByAscending:@"checkpoint"];
     //查找GameScore表所有数据
     [bquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         for (BmobObject *obj in array) {
-            if ([obj objectForKey:@"stepsFirstCount"] != 0) {
-                _dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[obj objectForKey:@"userName"], @"userName", [obj objectForKey:@"stepsFirstCount"], @"firstPass", [obj objectForKey:@"stepsSecondCount"], @"secondPass", nil];
-                [_dataSource addObject:_dic];
+            if ([obj objectForKey:@"checkpoint"] != 0) {
+                weakSelf.dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[obj objectForKey:@"userName"], @"userName", [obj objectForKey:@"checkpoint"], @"checkpoint", nil];
+                [weakSelf.dataSource addObject:weakSelf.dic];
                 [self.tableView reloadData];
             }
         }
@@ -68,19 +68,15 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString * cellID = @"1234yd";
-    RankListCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    NSString *cellID = NSStringFromClass([RankListCell class]);
+    RankListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[RankListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
-    cell.userNameLabel.text = @"姓名：";
-    cell.userName.text = [_dataSource[indexPath.row] objectForKey:@"userName"];
-    cell.firstPassLabel.text = @"第一关成绩：";
-    cell.firstPass.text = [_dataSource[indexPath.row] objectForKey:@"firstPass"];
-    cell.firstPassRight.text = @"步";
-    cell.secondPassLabel.text = @"第二关成绩：";
-    cell.secondPass.text = [_dataSource[indexPath.row] objectForKey:@"secondPass"];
-    cell.secondPassRight.text = @"步";
+    
+    cell.userNameLab.text = [NSString stringWithFormat:@"姓名：%@", [_dataSource[indexPath.row] objectForKey:@"userName"]];
+    cell.titleLab.text = [NSString stringWithFormat:@"%@关", [_dataSource[indexPath.row] objectForKey:@"checkpoint"]];
+    
     return cell;
 }
 

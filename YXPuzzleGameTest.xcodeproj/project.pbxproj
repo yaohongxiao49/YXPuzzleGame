@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8421C4992485F49500C0D31A /* ImgGameGroupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421C4982485F49500C0D31A /* ImgGameGroupVC.m */; };
+		8421C49C24864A0B00C0D31A /* UserMessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421C49B24864A0B00C0D31A /* UserMessageManager.m */; };
 		847D8B132484C7A800B09228 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B122484C7A800B09228 /* AppDelegate.m */; };
 		847D8B162484C7A800B09228 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B152484C7A800B09228 /* SceneDelegate.m */; };
 		847D8B1C2484C7A800B09228 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 847D8B1A2484C7A800B09228 /* Main.storyboard */; };
@@ -30,7 +32,6 @@
 		847D8B7E2484CD8B00B09228 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847D8B7D2484CD8B00B09228 /* CoreGraphics.framework */; };
 		847D8B802484CD9300B09228 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847D8B7F2484CD9300B09228 /* Security.framework */; };
 		847D8B822484CDA100B09228 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847D8B812484CDA100B09228 /* CoreLocation.framework */; };
-		847D8B882484D07300B09228 /* ImgGameVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B872484D07300B09228 /* ImgGameVC.m */; };
 		847D8B8C2484D8F800B09228 /* SettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B8B2484D8F800B09228 /* SettingVC.m */; };
 		847D8B932484D9F000B09228 /* RankListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B922484D9F000B09228 /* RankListVC.m */; };
 		847D8B962484DA6F00B09228 /* RankListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847D8B952484DA6F00B09228 /* RankListCell.m */; };
@@ -70,6 +71,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8421C4972485F49500C0D31A /* ImgGameGroupVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgGameGroupVC.h; sourceTree = "<group>"; };
+		8421C4982485F49500C0D31A /* ImgGameGroupVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgGameGroupVC.m; sourceTree = "<group>"; };
+		8421C49A24864A0B00C0D31A /* UserMessageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserMessageManager.h; sourceTree = "<group>"; };
+		8421C49B24864A0B00C0D31A /* UserMessageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserMessageManager.m; sourceTree = "<group>"; };
+		8421C49D24864BEE00C0D31A /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		847D8B0E2484C7A800B09228 /* YXPuzzleGameTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YXPuzzleGameTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		847D8B112484C7A800B09228 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		847D8B122484C7A800B09228 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -104,8 +110,6 @@
 		847D8B7D2484CD8B00B09228 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		847D8B7F2484CD9300B09228 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		847D8B812484CDA100B09228 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		847D8B862484D07300B09228 /* ImgGameVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgGameVC.h; sourceTree = "<group>"; };
-		847D8B872484D07300B09228 /* ImgGameVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgGameVC.m; sourceTree = "<group>"; };
 		847D8B8A2484D8F800B09228 /* SettingVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingVC.h; sourceTree = "<group>"; };
 		847D8B8B2484D8F800B09228 /* SettingVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingVC.m; sourceTree = "<group>"; };
 		847D8B912484D9F000B09228 /* RankListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RankListVC.h; sourceTree = "<group>"; };
@@ -205,6 +209,9 @@
 				847D8B152484C7A800B09228 /* SceneDelegate.m */,
 				847D8B4D2484C8AC00B09228 /* BaseTabBarVC.h */,
 				847D8B4E2484C8AC00B09228 /* BaseTabBarVC.m */,
+				8421C49A24864A0B00C0D31A /* UserMessageManager.h */,
+				8421C49B24864A0B00C0D31A /* UserMessageManager.m */,
+				8421C49D24864BEE00C0D31A /* PrefixHeader.pch */,
 				847D8B1A2484C7A800B09228 /* Main.storyboard */,
 				847D8B1D2484C7A800B09228 /* Assets.xcassets */,
 				847D8B1F2484C7A800B09228 /* LaunchScreen.storyboard */,
@@ -267,8 +274,8 @@
 		847D8B852484D05400B09228 /* ImgGameVC */ = {
 			isa = PBXGroup;
 			children = (
-				847D8B862484D07300B09228 /* ImgGameVC.h */,
-				847D8B872484D07300B09228 /* ImgGameVC.m */,
+				8421C4972485F49500C0D31A /* ImgGameGroupVC.h */,
+				8421C4982485F49500C0D31A /* ImgGameGroupVC.m */,
 			);
 			path = ImgGameVC;
 			sourceTree = "<group>";
@@ -474,6 +481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8421C4992485F49500C0D31A /* ImgGameGroupVC.m in Sources */,
 				847D8B4F2484C8AC00B09228 /* BaseTabBarVC.m in Sources */,
 				847D8B132484C7A800B09228 /* AppDelegate.m in Sources */,
 				847D8B492484C86200B09228 /* LoginVC.m in Sources */,
@@ -481,9 +489,9 @@
 				847D8B242484C7A800B09228 /* main.m in Sources */,
 				847D8BBE2484F05200B09228 /* ViewController.m in Sources */,
 				847D8B4C2484C87700B09228 /* RegistVC.m in Sources */,
-				847D8B882484D07300B09228 /* ImgGameVC.m in Sources */,
 				847D8B8C2484D8F800B09228 /* SettingVC.m in Sources */,
 				847D8B962484DA6F00B09228 /* RankListCell.m in Sources */,
+				8421C49C24864A0B00C0D31A /* UserMessageManager.m in Sources */,
 				847D8B162484C7A800B09228 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -657,6 +665,8 @@
 				DEVELOPMENT_TEAM = 2HSQ24Z864;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/YXPuzzleGameTest";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/YXPuzzleGameTest/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = YXPuzzleGameTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -678,6 +688,8 @@
 				DEVELOPMENT_TEAM = 2HSQ24Z864;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/YXPuzzleGameTest";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/YXPuzzleGameTest/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = YXPuzzleGameTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

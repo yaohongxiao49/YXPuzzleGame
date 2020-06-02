@@ -7,7 +7,6 @@
 //
 
 #import "LoginVC.h"
-#import <BmobSDK/Bmob.h>
 #import <AVFoundation/AVFoundation.h>
 
 #import "BaseTabBarVC.h"
@@ -171,10 +170,13 @@
     
     __weak typeof(self) weakSelf = self;
     if (_userNameTextFiled.text.length == 0 || _userPasswordTextFiled.text.length == 0) {
-        UIAlertView *alertView2 = [[UIAlertView alloc] initWithTitle:@"提示" message:@"账号和密码不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alertView2 show];
-                //结束动画
-                [_indecatorView stopAnimating];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"账号和密码不能为空" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *sure = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@", @"确定"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {}];
+        [alert addAction:sure];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        //结束动画
+        [_indecatorView stopAnimating];
         //添加音乐
         [self initAudioPlayerWithMusicName:_musicNames[_currentMusicIndex] autoPlay:YES];
     }
@@ -186,6 +188,9 @@
             
             for (BmobObject *obj in array) {
                 if ([weakSelf.userNameTextFiled.text isEqual:[obj objectForKey:@"userName"]] && [weakSelf.userPasswordTextFiled.text isEqual:[obj objectForKey:@"passWord"]]) {
+                    [UserMessageManager sharedManager].userName = [obj objectForKey:@"userName"];
+                    [UserMessageManager sharedManager].userId = obj.objectId;
+                    
                     weakSelf.isLog = YES;
                     //活动指示器
                     weakSelf.indecatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -195,10 +200,10 @@
                     [weakSelf.indecatorView startAnimating];
                     [weakSelf.view addSubview:weakSelf.indecatorView];
                     //活动指示器的监听
-                    [weakSelf performSelector:@selector(processLoginButton1) withObject:nil afterDelay:3];
+                    [weakSelf performSelector:@selector(processLoginActivity) withObject:nil afterDelay:3];
                     
                     //转场动画
-                    CATransition * transition = [[CATransition alloc] init];
+                    CATransition *transition = [[CATransition alloc] init];
                     //动画时长
                     transition.duration = 3;
                     //动画效果
@@ -211,8 +216,11 @@
                 }
             }
             if (!weakSelf.isLog) {
-                UIAlertView *alertView1 = [[UIAlertView alloc] initWithTitle:@"提示" message:@"用户名或者密码错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alertView1 show];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"账号和密码不能错误" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *sure = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@", @"确定"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {}];
+                [alert addAction:sure];
+                [self presentViewController:alert animated:YES completion:nil];
+                
                 //结束动画
                 [weakSelf.indecatorView stopAnimating];
                 //添加音乐
@@ -245,10 +253,10 @@
     }
 }
 
-#pragma mark - 添加登录按钮事件监听
-- (void)processLoginButton1 {
+#pragma mark - 添加登录活动控制器监听
+- (void)processLoginActivity {
 
-    [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"login"];
+    [UserMessageManager sharedManager].boolLogin = YES;
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -151,16 +151,17 @@
     
     __weak typeof(self) weakSelf = self;
     if (_userNameTextFiled.text.length == 0 || _userPasswordTextFiled.text.length == 0) {
-        UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"账号和密码不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alertView show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"账号和密码不能为空" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *sure = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@", @"确定"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {}];
+        [alert addAction:sure];
+        [self presentViewController:alert animated:YES completion:nil];
     }
     else {
         //添加数据
         BmobObject *JigsawGame = [BmobObject objectWithClassName:@"JigsawGame"];
         [JigsawGame setObject:_userNameTextFiled.text forKey:@"userName"];
         [JigsawGame setObject:_userPasswordTextFiled.text forKey:@"passWord"];
-        [JigsawGame setObject:@"0" forKey:@"stepsFirstCount"];
-        [JigsawGame setObject:@"0" forKey:@"stepsSecondCount"];
+        [JigsawGame setObject:@"0" forKey:@"checkpoint"];
         [JigsawGame saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
             //进行操作
         }];

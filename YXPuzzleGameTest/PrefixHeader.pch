@@ -1,0 +1,15 @@
+//
+//  PrefixHeader.pch
+//  YXPuzzleGameTest
+//
+//  Created by ios on 2020/6/2.
+//  Copyright © 2020 August. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import "UserMessageManager.h"
+#import <BmobSDK/Bmob.h>
+
+#endif /* PrefixHeader_pch */
