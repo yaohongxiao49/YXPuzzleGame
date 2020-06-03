@@ -87,7 +87,7 @@
     
     ImgGameGroupVC *vc = [[ImgGameGroupVC alloc] init];
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    vc.exChangeImgArr = @[@"Pom1.png", @"Pom2.png", @"Pom3.png"];
+    vc.exChangeImgArr = [[NSMutableArray alloc] initWithArray:@[@"Pom1.png", @"Pom2.png", @"Pom3.png"]];
     vc.baseNum = 3;
     [self presentViewController:vc animated:YES completion:nil];
 }

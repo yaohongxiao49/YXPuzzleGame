@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSInteger stepAmount; //步数统计
 @property (nonatomic, assign) NSInteger placeHolderIndex; //占位下标
 @property (nonatomic, assign) NSInteger checkpointAmount; //关卡统计
+@property (nonatomic, assign) BOOL boolSettlement; //是否结算
 
 @end
 
@@ -47,7 +48,8 @@
         [imgV.gestureRecognizers enumerateObjectsUsingBlock:^(__kindof UIGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
            
             if ([obj isKindOfClass:[UITapGestureRecognizer class]]) {
-                [weakSelf processGestureRecognizer:obj];
+                weakSelf.boolSettlement = NO;
+                [weakSelf imgChange:obj.view.tag];
             }
         }];
     }
@@ -88,7 +90,21 @@
                         [obj setObject:[NSString stringWithFormat:@"%@", @(weakSelf.checkpointAmount)] forKey:@"checkpoint"];
                         //异步更新数据
                         [obj updateInBackground];
-                        [weakSelf uploadValue];
+                        
+                        [weakSelf.exChangeImgArr removeObjectAtIndex:0];
+                        if (weakSelf.exChangeImgArr.count != 0) {
+                            [weakSelf uploadValue];
+                        }
+                        else {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"恭喜您" message:@"您已经通关了！快去欣赏自己的排名吧" preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *sure = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@", @"确定"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                                
+                                [weakSelf processBackHomeBtn];
+                            }];
+                            
+                            [alert addAction:sure];
+                            [weakSelf presentViewController:alert animated:YES completion:nil];
+                        }
                     }
                 }
                 else {
@@ -189,7 +205,7 @@
             imgV.backgroundColor = [UIColor blackColor];
             imgV.tag = amount;
             imgV.userInteractionEnabled = YES;
-            [self.showBgView addSubview:imgV];
+            [_showBgView addSubview:imgV];
             
             if (amount != (imgAmount - 1)) { //不是最后一张，正常显示
                 imgV.image = [UIImage imageWithCIImage:newImg];
@@ -208,9 +224,44 @@
 #pragma mark - 图片移动
 - (void)stepImgVMoveByImgV:(UIImageView *)imgV placeHolderImgV:(UIImageView *)placeHolderImgV {
     
-    __weak typeof(self) weakSelf = self;
     NSInteger size = (NSInteger)(_showBgView.bounds.size.width /self.baseNum);
     
+    if (imgV.frame.origin.x - size == placeHolderImgV.frame.origin.x && imgV.frame.origin.y == placeHolderImgV.frame.origin.y) { //left
+        [self exChangeImgVAndArrByImgV:imgV placeHolderImgV:placeHolderImgV];
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
+            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x + size, imgV.frame.origin.y, size, size);
+        }];
+    }
+    else if (imgV.frame.origin.x + size == placeHolderImgV.frame.origin.x && imgV.frame.origin.y == placeHolderImgV.frame.origin.y) { //right
+        [self exChangeImgVAndArrByImgV:imgV placeHolderImgV:placeHolderImgV];
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
+            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x - size, imgV.frame.origin.y, size, size);
+        }];
+    }
+    else if (imgV.frame.origin.x == placeHolderImgV.frame.origin.x && imgV.frame.origin.y - size == placeHolderImgV.frame.origin.y) { //up
+        [self exChangeImgVAndArrByImgV:imgV placeHolderImgV:placeHolderImgV];
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
+            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x, imgV.frame.origin.y + size, size, size);
+        }];
+    }
+    else if (imgV.frame.origin.x == placeHolderImgV.frame.origin.x && imgV.frame.origin.y + size == placeHolderImgV.frame.origin.y) { //down
+        [self exChangeImgVAndArrByImgV:imgV placeHolderImgV:placeHolderImgV];
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
+            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x, imgV.frame.origin.y - size, size, size);
+        }];
+    }
+}
+- (void)exChangeImgVAndArrByImgV:(UIImageView *)imgV placeHolderImgV:(UIImageView *)placeHolderImgV {
+    
+    __weak typeof(self) weakSelf = self;
     __block NSInteger placeHodleIndex = placeHolderImgV.tag;
     __block NSInteger exChangeIndex = 0;
     [_stepImgArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -225,35 +276,6 @@
     }];
     
     [_stepImgArr exchangeObjectAtIndex:exChangeIndex withObjectAtIndex:placeHodleIndex];
-    
-    if (imgV.frame.origin.x - size == placeHolderImgV.frame.origin.x && imgV.frame.origin.y == placeHolderImgV.frame.origin.y) { //left
-        [UIView animateWithDuration:0.5 animations:^{
-            
-            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
-            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x + size, imgV.frame.origin.y, size, size);
-        }];
-    }
-    else if (imgV.frame.origin.x + size == placeHolderImgV.frame.origin.x && imgV.frame.origin.y == placeHolderImgV.frame.origin.y) { //right
-        [UIView animateWithDuration:0.5 animations:^{
-            
-            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
-            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x - size, imgV.frame.origin.y, size, size);
-        }];
-    }
-    else if (imgV.frame.origin.x == placeHolderImgV.frame.origin.x && imgV.frame.origin.y - size == placeHolderImgV.frame.origin.y) { //up
-        [UIView animateWithDuration:0.5 animations:^{
-            
-            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
-            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x, imgV.frame.origin.y + size, size, size);
-        }];
-    }
-    else if (imgV.frame.origin.x == placeHolderImgV.frame.origin.x && imgV.frame.origin.y + size == placeHolderImgV.frame.origin.y) { //down
-        [UIView animateWithDuration:0.5 animations:^{
-            
-            imgV.frame = CGRectMake(placeHolderImgV.frame.origin.x, placeHolderImgV.frame.origin.y, size, size);
-            placeHolderImgV.frame = CGRectMake(imgV.frame.origin.x, imgV.frame.origin.y - size, size, size);
-        }];
-    }
 }
 
 #pragma mark - 判断是否拼接完成
@@ -308,13 +330,13 @@
     [self uploadValue];
 }
 
-#pragma mark - 点击图片
-- (void)processGestureRecognizer:(UIGestureRecognizer *)gesture {
+#pragma mark - 图片变换
+- (void)imgChange:(NSInteger)tag {
     
-    __block NSInteger moveImgIndex = gesture.view.tag;
+    __block NSInteger moveImgIndex = tag;
     [_stepImgArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        if (obj.tag == gesture.view.tag) {
+        if (obj.tag == tag) {
             moveImgIndex = idx;
         }
     }];
@@ -322,7 +344,14 @@
     UIImageView *placeHolderImgV = _stepImgArr[_placeHolderIndex];
     
     [self stepImgVMoveByImgV:moveImgV placeHolderImgV:placeHolderImgV];
-    [self judgeImgVSame];
+    if (_boolSettlement) [self judgeImgVSame];
+}
+
+#pragma mark - 点击图片
+- (void)processGestureRecognizer:(UIGestureRecognizer *)gesture {
+    
+    _boolSettlement = YES;
+    [self imgChange:gesture.view.tag];
     _stepAmount++;
 }
 
@@ -332,6 +361,10 @@
     _currentImgUrl = [self.exChangeImgArr firstObject];
     NSInteger imgAmount = self.baseNum *self.baseNum;
     _placeHolderIndex = (imgAmount - 1) < 0 ? 0 : (imgAmount - 1);
+    [_showBgView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        [obj removeFromSuperview];
+    }];
 }
 
 #pragma mark - 初始化视图
