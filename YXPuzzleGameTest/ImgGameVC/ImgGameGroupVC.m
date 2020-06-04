@@ -327,7 +327,21 @@
 #pragma mark - 换一关
 - (void)processChangeCheckpointBtn {
     
-    [self uploadValue];
+    __weak typeof(self) weakSelf = self;
+    NSInteger index = arc4random() %self.exChangeImgArr.count;
+    _currentImgUrl = self.exChangeImgArr[index];
+    NSInteger imgAmount = self.baseNum *self.baseNum;
+    _placeHolderIndex = (imgAmount - 1) < 0 ? 0 : (imgAmount - 1);
+    [_showBgView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        [obj removeFromSuperview];
+    }];
+    [self loadImgVByUrl:_currentImgUrl showImgV:_currentImgV finished:^(UIImage *img) {
+      
+        [weakSelf.currentImgV setImage:img];
+        [weakSelf cuttingImg];
+        [weakSelf randomImgVArrangement];
+    }];
 }
 
 #pragma mark - 图片变换

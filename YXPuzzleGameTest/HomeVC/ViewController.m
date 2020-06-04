@@ -20,6 +20,18 @@
 
 @implementation ViewController
 
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Notification
+- (void)processSuccess:(NSNotification *)notification {
+    
+    NSDictionary *dic = [notification userInfo];
+    _userName.text = [dic objectForKey:@"text"];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -34,11 +46,17 @@
     [self.view addSubview:_imageView];
     
     [self initView];
+    [self judgeShowLogin];
+}
+
+#pragma mark - 判断是否弹出登录
+- (void)judgeShowLogin {
     
     BOOL boolLogin = [UserMessageManager sharedManager].boolLogin;
     if (!boolLogin) [self login];
 }
 
+#pragma mark - 弹出登录
 - (void)login {
     
     LoginVC *loginVC = [[LoginVC alloc] init];
@@ -46,6 +64,40 @@
     [self presentViewController:loginVC animated:YES completion:nil];
 }
 
+#pragma mark - Process
+#pragma mark - 游戏开始按钮事件监听
+- (void)processStartGameButton {
+    
+    __weak typeof(self) weakSelf = self;
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"JigsawGameRankList"];
+    [bquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        
+        for (BmobObject *obj in array) {
+            NSMutableArray *bannerArr = [[NSMutableArray alloc] initWithArray:[obj objectForKey:@"imgs"]];
+            ImgGameGroupVC *vc = [[ImgGameGroupVC alloc] init];
+            vc.modalPresentationStyle = UIModalPresentationFullScreen;
+            vc.exChangeImgArr = bannerArr;
+            vc.baseNum = 3;
+            [weakSelf presentViewController:vc animated:YES completion:nil];
+        }
+    }];
+}
+
+#pragma mark - 排行榜按钮事件监听
+- (void)processSelectGameButton {
+    
+    RankListVC *vc = [[RankListVC alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 退出登录
+- (void)processLoginOutButton {
+    
+    [[UserMessageManager sharedManager] loginOut];
+    [self judgeShowLogin];
+}
+
+#pragma mark - 初始化视图
 - (void)initView {
     
     UILabel *welComeText = [[UILabel alloc] initWithFrame:CGRectMake(15, 120, 100, 30)];
@@ -78,31 +130,16 @@
     [selectGameButton addTarget:self action:@selector(processSelectGameButton) forControlEvents:UIControlEventTouchUpInside];
     [_imageView addSubview:selectGameButton];
     
+    UIButton *loginOutButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    loginOutButton.frame = CGRectMake(0, 0, 300, 50);
+    loginOutButton.center = CGPointMake(self.view.center.x, self.view.center.y + 100);
+    loginOutButton.layer.cornerRadius = 5;
+    [loginOutButton setTitle:@"退出登录" forState:UIControlStateNormal];
+    loginOutButton.titleLabel.font = [UIFont systemFontOfSize:30];
+    [loginOutButton addTarget:self action:@selector(processLoginOutButton) forControlEvents:UIControlEventTouchUpInside];
+    [_imageView addSubview:loginOutButton];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processSuccess:) name:@"success" object:nil];
-}
-
-#pragma mark - Process
-/** 游戏开始按钮事件监听 */
-- (void)processStartGameButton {
-    
-    ImgGameGroupVC *vc = [[ImgGameGroupVC alloc] init];
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    vc.exChangeImgArr = [[NSMutableArray alloc] initWithArray:@[@"Pom1.png", @"Pom2.png", @"Pom3.png"]];
-    vc.baseNum = 3;
-    [self presentViewController:vc animated:YES completion:nil];
-}
-/** 排行榜按钮事件监听 */
-- (void)processSelectGameButton {
-    
-    RankListVC *vc = [[RankListVC alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-#pragma mark - Notification
-- (void)processSuccess:(NSNotification *)notification {
-    
-    NSDictionary *dic = [notification userInfo];
-    _userName.text = [dic objectForKey:@"text"];
 }
 
 @end

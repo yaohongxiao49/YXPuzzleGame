@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 用户名 */
 @property (nonatomic, copy) NSString *userName;
 
+/** 退出登录 */
+- (void)loginOut;
+
 @end
 
 NS_ASSUME_NONNULL_END

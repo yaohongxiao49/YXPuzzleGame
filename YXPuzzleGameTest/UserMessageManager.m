@@ -21,6 +21,13 @@
     return instance;
 }
 
+- (void)loginOut {
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"login"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userId"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userName"];
+}
+
 #pragma mark - 是否登录
 - (void)setBoolLogin:(BOOL)boolLogin {
     
