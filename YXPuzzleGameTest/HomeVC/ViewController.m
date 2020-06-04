@@ -77,7 +77,7 @@
             ImgGameGroupVC *vc = [[ImgGameGroupVC alloc] init];
             vc.modalPresentationStyle = UIModalPresentationFullScreen;
             vc.exChangeImgArr = bannerArr;
-            vc.baseNum = 3;
+            vc.baseNum = 4;
             [weakSelf presentViewController:vc animated:YES completion:nil];
         }
     }];

@@ -60,7 +60,7 @@
     
     __weak typeof(self) weakSelf = self;
     [self initDataSource];
-    [self loadImgVByUrl:_currentImgUrl showImgV:_currentImgV finished:^(UIImage *img) {
+    [self loadImgVByUrl:_currentImgUrl showBgV:_showBgView finished:^(UIImage *img) {
       
         [weakSelf.currentImgV setImage:img];
         [weakSelf cuttingImg];
@@ -118,7 +118,7 @@
 }
 
 #pragma mark - 加载图片
-- (void)loadImgVByUrl:(NSString *)url showImgV:(UIImageView *)showImgV finished:(void(^)(UIImage *img))finished {
+- (void)loadImgVByUrl:(NSString *)url showBgV:(UIView *)showBgV finished:(void(^)(UIImage *img))finished {
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -126,7 +126,7 @@
         UIImage *img = [url containsString:@"http"] ? [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]] : [UIImage imageNamed:url];
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            UIImage *endImg = [weakSelf imgCompressForSizeImg:img targetSize:showImgV.bounds.size];
+            UIImage *endImg = [weakSelf imgCompressForSizeImg:img targetSize:showBgV.bounds.size];
             if (finished) {
                 finished(endImg);
             }
@@ -336,7 +336,7 @@
        
         [obj removeFromSuperview];
     }];
-    [self loadImgVByUrl:_currentImgUrl showImgV:_currentImgV finished:^(UIImage *img) {
+    [self loadImgVByUrl:_currentImgUrl showBgV:_showBgView finished:^(UIImage *img) {
       
         [weakSelf.currentImgV setImage:img];
         [weakSelf cuttingImg];
@@ -397,6 +397,7 @@
     [bgImgV addSubview:_showBgView];
     
     _currentImgV = [[UIImageView alloc] initWithFrame:CGRectMake(bgImgV.bounds.size.width - 120, _showBgView.frame.origin.y - 120, 100, 100)];
+    _currentImgV.contentMode = UIViewContentModeScaleAspectFill;
     [bgImgV addSubview:_currentImgV];
     
     UIButton *backHomeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
