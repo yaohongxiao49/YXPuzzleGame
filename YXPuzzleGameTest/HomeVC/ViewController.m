@@ -69,7 +69,7 @@
 - (void)processStartGameButton {
     
     __weak typeof(self) weakSelf = self;
-    BmobQuery *bquery = [BmobQuery queryWithClassName:@"JigsawGameRankList"];
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"JigsawGameImgList"];
     [bquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         
         for (BmobObject *obj in array) {
